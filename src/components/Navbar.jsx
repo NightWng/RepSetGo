@@ -40,7 +40,7 @@ const Left = styled.div`
  */
 const Language = styled.span`
     font-size: 14px;
-    cursor: ponter;
+    cursor: pointer;
 `
 
 /* This is for searchbox in top left of nav bar as the </Left> component is its parent component used in this case for the navbar
@@ -117,4 +117,4 @@ const Navbar = () => {
     );
 };
 
-export default Navbar;
+export default Navbar
