@@ -4,6 +4,7 @@ import { useState } from "react"
 import {sliderItems} from "../data"
 
 
+
 //height 100vh means it will take up the screen
 //positon: relative places an elment relative to its current position without changing the layout around it
 //parent has parent relative and child has positon absolute
@@ -41,11 +42,16 @@ const Arrow = styled.div`
 
 //here the wrapper contains the slider too
 //and to make all the slide elements, horizontal, we do display: flex
+//transition: all 1.5s ease means all transformations in the div will have an ease into animation applied that will take 1.5s to animate
 //transform: trasnlateX(0vw) movesthe current wrapper on the x axis by 0vw (width of container)
+//however here for transform: we are passing in a props value from the slideIndex parameter of the Wrapper container
+//slideIndex is multiplied by -100 with units vw (of the screen) and so the it will set the width to show only that slide
+//allows translations between slides horizontally on arrow clicks
 const Wrapper = styled.div`
     height: 100%;
     display: flex;
-    transform: translateX(0vw);
+    transition: all 1.5s ease;
+    transform: translateX(${props=>props.slideIndex * -100}vw);
 `
 
 
@@ -107,8 +113,26 @@ const Slider = () => {
 
     //handleClick function with parameter of direction passed in
     //this function used to handle the onClick event for each arrow button on the slider
-    const handleClick = (direction) => {
+    const handleClick = (direction) => 
+    {
 
+        //if the left arrow is pressed
+        if(direction === "left")
+        {
+            //check if slideIndex is greater than 0 (we are on a slide later than the 0th index (first) slide)
+            //if it is not the first slide, subtract slide index by one (move one slide back)
+            //if its not greater than 0 (meaning we are at the first slide) then pressing the left arrow will take us to the last slide (slide index of 3)
+            setSlideIndex(slideIndex > 0 ? slideIndex-1 : 3)
+        } 
+        //if right arrow is pressed
+        else
+        {
+            //else means direction === "right" meaning right arrow is pressed
+            //check if slideIndex is less than 3 (we are on a slide before the 3rd index (last) slide)
+            //if it is not the last slide, add slide index by one (move one slide forward)
+            //if its not less than 3 (meaning we are at the last slide (index 3)) then pressing the right arrow will take us to the first slide (slide index of 0)
+            setSlideIndex(slideIndex < 3 ? slideIndex+1 : 0)
+        }
     };
 
 
@@ -117,11 +141,11 @@ const Slider = () => {
             <Arrow direction="left" onClick={()=>handleClick("left")}>
                 <ArrowLeftOutlined/>
             </Arrow>
-            <Wrapper>
+            <Wrapper slideIndex={slideIndex}>
                 {sliderItems.map((item) => (
                     <Slide bg={item.bg}>
                         <ImgContainer>
-                            <Image src={require(item.img)} />
+                            <Image src= {item.img} />
                         </ImgContainer>
                         <InfoContainer>
                             <Title>{item.title}</Title>
