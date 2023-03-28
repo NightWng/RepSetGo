@@ -136,6 +136,9 @@ const Slider = () => {
     };
 
 
+    //to change size of image container on the slider, in the future
+    //make sure the imager container takes in some props and that props set the height and width of ur specified image
+    //can add a new porperty to the image array in data.js
     return (
         <Container>
             <Arrow direction="left" onClick={()=>handleClick("left")}>
